@@ -1,0 +1,62 @@
+Seleccion del problema
+
+Tomemos la ecuacion diferencial separable:
+
+dy/dt = y(1 - t)
+
+con condicion inicial y(0) = 1.
+
+Solucion analitica con separacion de variables
+
+Separando variables:
+
+(1/y) dy = (1 - t) dt
+
+Integrando ambos lados:
+
+ln |y| = t - (t^2)/2 + C
+
+Despejando y:
+
+y(t) = C * e^(t - (t^2)/2)
+
+Usando la condicion inicial y(0) = 1, tenemos C = 1, entonces
+
+y(t) = e^(t - (t^2)/2)
+
+Codigo Python que incluye solucion analitica y aproximacion con Euler
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Definimos la funcion de la EDO dy/dt = y(1 - t)
+def f(t, y):
+    return y * (1 - t)
+
+# Parametros
+t0, t_final = 0, 1
+h = 0.2  # paso
+n_steps = int((t_final - t0) / h) + 1
+
+# Inicializacion
+t_values = np.linspace(t0, t_final, n_steps)
+y_euler = np.zeros(n_steps)
+y_exact = np.exp(t_values - 0.5 * t_values**2)
+
+# Condicion inicial
+y_euler[0] = 1
+
+# Metodo de Euler
+for i in range(1, n_steps):
+    y_euler[i] = y_euler[i-1] + h * f(t_values[i-1], y_euler[i-1])
+
+# Graficar resultados
+plt.plot(t_values, y_exact, label="Solucion exacta", marker='o')
+plt.plot(t_values, y_euler, label="Euler (h=0.2)", marker='x')
+plt.xlabel('t')
+plt.ylabel('y')
+plt.title('Comparacion entre solucion exacta y metodo de Euler')
+plt.legend()
+plt.grid(True)
+plt.show()
+
